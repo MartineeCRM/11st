@@ -19,7 +19,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r iam_valid_click_batch/requirements.txt
 
       - name: Run main.py
-        run: python iam_valid_click_batch.py
+        run: python iam_valid_click_batch/iam_valid_click_batch.py
