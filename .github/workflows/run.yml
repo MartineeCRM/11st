@@ -5,6 +5,9 @@ on:
     - cron: '0 15 * * *'   # KST 00:00
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   run-python:
     runs-on: ubuntu-latest
@@ -23,3 +26,13 @@ jobs:
 
       - name: Run main.py
         run: python iam_valid_click_batch/iam_valid_click_batch.py
+
+      - name: Keep repository active (prevent 60-day auto-disable)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          mkdir -p .github
+          echo "Last scheduled run: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > .github/last_run.txt
+          git add .github/last_run.txt
+          git diff --staged --quiet || git commit -m "chore: update last run timestamp [skip ci]"
+          git push
